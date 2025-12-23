@@ -33,9 +33,10 @@ RUN code-server --install-extension ms-toolsai.jupyter
 # Install apt packages:
 # RUN sudo apt-get install -y ubuntu-make
 
-# Install Bun
-RUN curl -fsSL https://bun.sh/install | bash
-ENV PATH="/home/coder/.bun/bin:${PATH}"
+# Install Bun to /opt/bun (so it persists when /home/coder is mounted as a volume)
+RUN sudo mkdir -p /opt/bun && sudo chown coder:coder /opt/bun
+RUN curl -fsSL https://bun.sh/install | BUN_INSTALL=/opt/bun bash
+ENV PATH="/opt/bun/bin:${PATH}"
 
 # Copy files: 
 # COPY deploy-container/myTool /home/coder/myTool
