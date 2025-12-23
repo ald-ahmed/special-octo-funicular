@@ -20,9 +20,11 @@ RUN sudo chown -R coder:coder /home/coder/.local
 
 # You can add custom software and dependencies for your environment below
 # -----------
-SERVICE_URL=https://open-vsx.org/vscode/gallery \
-ITEM_URL=https://open-vsx.org/vscode/item \
-  
+
+# Configure Open VSX marketplace for extensions
+ENV SERVICE_URL=https://open-vsx.org/vscode/gallery
+ENV ITEM_URL=https://open-vsx.org/vscode/item
+ENV CS_DISABLE_GETTING_STARTED_OVERRIDE=true
 # Install a VS Code extension:
 # Note: we use a different marketplace than VS Code. See https://github.com/cdr/code-server/blob/main/docs/FAQ.md#differences-compared-to-vs-code
 RUN code-server --install-extension esbenp.prettier-vscode
