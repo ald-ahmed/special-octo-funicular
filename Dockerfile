@@ -1,6 +1,5 @@
 # Start from the code-server Debian base image
-FROM codercom/code-server:4.9.0
-
+FROM codercom/code-server:4.107.0-39
 USER coder
 
 # Apply VS Code settings
@@ -21,13 +20,20 @@ RUN sudo chown -R coder:coder /home/coder/.local
 
 # You can add custom software and dependencies for your environment below
 # -----------
-
+SERVICE_URL=https://open-vsx.org/vscode/gallery \
+ITEM_URL=https://open-vsx.org/vscode/item \
+  
 # Install a VS Code extension:
 # Note: we use a different marketplace than VS Code. See https://github.com/cdr/code-server/blob/main/docs/FAQ.md#differences-compared-to-vs-code
-# RUN code-server --install-extension esbenp.prettier-vscode
-
+RUN code-server --install-extension esbenp.prettier-vscode
+RUN code-server --install-extension bradlc.vscode-tailwindcss
+RUN code-server --install-extension ms-toolsai.jupyter
 # Install apt packages:
 # RUN sudo apt-get install -y ubuntu-make
+
+# Install Bun
+RUN curl -fsSL https://bun.sh/install | bash
+ENV PATH="/home/coder/.bun/bin:${PATH}"
 
 # Copy files: 
 # COPY deploy-container/myTool /home/coder/myTool
