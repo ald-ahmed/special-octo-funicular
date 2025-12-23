@@ -4,6 +4,9 @@ START_DIR="${START_DIR:-/home/coder/project}"
 
 PREFIX="deploy-code-server"
 
+# Fix permissions if /home/coder is mounted as a volume
+sudo chown -R coder:coder /home/coder
+
 mkdir -p $START_DIR
 
 # function to clone the git repo or add a user's first file if no repo was specified.
