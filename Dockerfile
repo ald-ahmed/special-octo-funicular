@@ -1,5 +1,12 @@
-# Start from the code-server Debian base image
+# Start from the code-server Alpine base image
 FROM codercom/code-server:4.107.0-39
+
+# Install unzip + rclone (support for remote filesystem) as root
+USER root
+RUN apk add --no-cache unzip bash curl
+RUN curl https://rclone.org/install.sh | bash
+
+# Switch back to coder user
 USER coder
 
 # Apply VS Code settings
@@ -8,15 +15,8 @@ COPY deploy-container/settings.json .local/share/code-server/User/settings.json
 # Use bash shell
 ENV SHELL=/bin/bash
 
-# Install unzip + rclone (support for remote filesystem)
-RUN sudo apt-get update && sudo apt-get install unzip -y
-RUN curl https://rclone.org/install.sh | sudo bash
-
 # Copy rclone tasks to /tmp, to potentially be used
 COPY deploy-container/rclone-tasks.json /tmp/rclone-tasks.json
-
-# Fix permissions for code-server
-RUN sudo chown -R coder:coder /home/coder/.local
 
 # You can add custom software and dependencies for your environment below
 # -----------
@@ -30,8 +30,8 @@ ENV CS_DISABLE_GETTING_STARTED_OVERRIDE=true
 RUN code-server --install-extension esbenp.prettier-vscode
 RUN code-server --install-extension bradlc.vscode-tailwindcss
 RUN code-server --install-extension ms-toolsai.jupyter
-# Install apt packages:
-# RUN sudo apt-get install -y ubuntu-make
+# Install apk packages:
+# RUN apk add --no-cache <package-name>
 
 # Install Bun
 RUN curl -fsSL https://bun.sh/install | bash
